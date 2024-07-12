@@ -70,9 +70,11 @@
 		<script type="module" src="dnssec_prover_wasm.js"></script>
 		<!-- doh_lookup.js comes from the `wasmpack` folder in the above git repo -->
 		<script type="module" src="doh_lookup.js"></script>
+		<script type="module" src="clipboard-svg.js"></script>
 		<script type="module">
 			import init, {verify_byte_stream} from './dnssec_prover_wasm.js';
 			import * as doh from './doh_lookup.js';
+			import {CLIPBOARD_SVG, CLIPBOARD_CHECK_SVG} from './clipboard-svg.js';
 			init().then(() => {
 				const address_box = document.getElementById("address");
 				const check_text = function() {
@@ -183,9 +185,9 @@
 						if (!/^[\p{ASCII}]*$/u.test(contents)) {
 							value = "<th>Invalid</th><th></th>";
 						} else if (contents.length < 70) {
-							value = "<th><a href='bitcoin:" + uri_pfx + contents + "'>" + contents + "</a></th><th><a href='#' id='addr_copy_" + addr_idx + "' onclick=\"copy('" + contents + "', " + addr_idx + ")\">Copy</a></th>";
+							value = "<th><a href='bitcoin:" + uri_pfx + contents + "'>" + contents + "</a></th><th><a href='#' id='addr_copy_" + addr_idx + "' onclick=\"copy('" + contents + "', " + addr_idx + ")\">" + CLIPBOARD_SVG + "</a></th>";
 						} else {
-							value = "<th><a href='bitcoin:" + uri_pfx + contents + "'>" + contents.substring(0, 70) + "...</a></th><th><a href='#' id='addr_copy_" + addr_idx + "' onclick=\"copy('" + contents + "', " + addr_idx + ")\">Copy</a></th>";
+							value = "<th><a href='bitcoin:" + uri_pfx + contents + "'>" + contents.substring(0, 70) + "...</a></th><th><a href='#' id='addr_copy_" + addr_idx + "' onclick=\"copy('" + contents + "', " + addr_idx + ")\">" + CLIPBOARD_SVG + "</a></th>";
 						}
 						addr_idx += 1;
 						addr_ty_table += "<tr><th>" + ty + "</th>" + value + "</tr>";
@@ -214,7 +216,7 @@
 				}
 				window.copy = function(text, element_id) {
 					navigator.clipboard.writeText(text);
-					document.getElementById("addr_copy_" + element_id).innerText = "Copied!";
+					document.getElementById("addr_copy_" + element_id).innerHTML = CLIPBOARD_CHECK_SVG;
 				}
 			});
 		</script>
