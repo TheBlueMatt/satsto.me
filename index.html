@@ -216,7 +216,11 @@
 				}
 				window.copy = function(text, element_id) {
 					navigator.clipboard.writeText(text);
-					document.getElementById("addr_copy_" + element_id).innerHTML = CLIPBOARD_CHECK_SVG;
+					const copy_elem = document.getElementById("addr_copy_" + element_id);
+					copy_elem.innerHTML = CLIPBOARD_CHECK_SVG;
+					setInterval(function() {
+						copy_elem.innerHTML = CLIPBOARD_SVG;
+					}, 2000);
 				}
 			});
 		</script>
