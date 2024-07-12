@@ -5,66 +5,137 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 		<style type="text/css">
 			body {
-				margin:30px auto;
-				max-width:660px;
+				margin: 0;
+				padding: 30px;
 				line-height:1.6;
 				font-size:14pt;
 				color:#444;
-				padding:0 10px;
+				background: #49797E;
+				font-family: sans;
 			}
 			h1, h2, h3 {
+				margin-top: 0;
 				line-height: 1.2;
 			}
-			.fill {
-				display: flex;
+			a { color: inherit; }
+			.fill { display: flex; }
+			.fill-use { flex: 1; }
+			.intro-text { color: white; }
+			@media screen and (min-width: 768px) {
+				body {
+					display: flex;
+					flex-wrap: wrap;
+					flex-flow: column wrap;
+					height: 100vh;
+					box-sizing: border-box;
+					padding: 0 0 30px 30px;
+				}
+				.intro-text {
+					flex: 0;
+					max-width: calc(50% - 15px);
+					padding-top: 30px;
+					padding-right: 40px;
+					box-sizing: border-box;
+				}
+				.footer {
+					flex: 1 0 50%;
+					max-width: calc(50% - 15px);
+					padding-right: 30px;
+					box-sizing: border-box;
+				}
+				.right {
+					flex: 1 0 50%;
+					max-width: calc(50% + 15px);
+					min-width: calc(50% + 15px);
+					order: 3;
+				}
+				.result {
+					height: 100%;
+					padding: 2.5% 2.5%;
+				}
+				.right-header {
+					padding: 30px 30px 20px 30px !important;
+				}
 			}
-			.fill-use {
-				flex: 1;
+			.right-header {
+				padding: 15px;
+				color: white;
+				background: #3B6367;
 			}
-			.small-print, .errors {
-				font-size:11pt;
+			.small-print {
+				color: white;
+				font-size: 11pt;
 			}
-			.button, .errors {
+			.result {
+				background: #2D4C4F;
+				color: white;
+				font-size: 12pt;
+			}
+			.result-populated {
+				padding: 15px;
+			}
+			.button {
 				width: fit-content;
 				margin-left: auto;
 				margin-right: auto;
 				display: block;
 			}
+			.address-card {
+				padding: 4px 16px;
+				margin: 4px 8px;
+				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+				border-radius: 7px;
+				background: white;
+			}
+			.address-link {
+				font-family: mono;
+				color: #808080;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				display: inline-block;
+				width: 100%;
+			}
+			.address-type {
+				color: black;
+			}
+			.address-copy {
+				float: right;
+			}
 		</style>
 		<title>BIP 353 Human Readable Names Resolver</title>
 	</head>
 	<body>
-		<h2>
-			BIP 353 Human Readable Names Resolver
-		</h2>
-		<span class="intro-text">
+		<div class="intro-text">
+			<h2>BIP 353 Human Readable Names Resolver</h2>
 			<p>
 				<a href="https://github.com/bitcoin/bips/blob/master/bip-0353.mediawiki">BIP 353</a> defines the way to encode simple human-readable names and map them to Bitcoin payment intructions.
 			<p>
 				If your wallet doesn't yet resolve BIP 353 names natively, this site will resolve them for you, letting you pay human readable names seamlessly.
 			</p>
-		</span>
-		<p class="input-result">
-			<form onsubmit="return false;" method="post">
-			<div class="fill">
-				₿<input class="fill-use" type="text" id="address" value="matt@satsto.me"/><br>
+		</div>
+		<div class="right">
+			<div class="right-header">
+				<form onsubmit="return false;" method="post">
+				<div class="fill">
+					₿<input class="fill-use" type="text" id="address" value="matt@satsto.me"/>
+					<input type="submit" class="button" onclick="lookup_domain()" id="paybutton" value="Pay" />
+				</div>
+				<div>
+					Resolve name using&nbsp;<select id="server">
+						<option value="https://dns.google/dns-query">Google's 8.8.8.8 Public DNS server</option>
+						<option value="http">satsto.me's native DNS proof server</option>
+						<option value="https://1.1.1.1/dns-query">Cloudflare's 1.1.1.1 Public DNS server</option>
+					</select>
+				</div>
+				<div class="errors" id="errors"></div>
 			</div>
-			<div>
-				Resolve name using&nbsp;<select id="server">
-					<option value="https://dns.google/dns-query">Google's 8.8.8.8 Public DNS server</option>
-					<option value="http">satsto.me's native DNS proof server</option>
-					<option value="https://1.1.1.1/dns-query">Cloudflare's 1.1.1.1 Public DNS server</option>
-				</select>
-			</div>
-			<div class="errors" id="result"></div>
-			<input type="submit" class="button" onclick="lookup_domain()" id="paybutton" value="Pay" />
-		</p>
-		<p></p>
-		<span class="footer">
+			<div class="result" id="result"></div>
+		</div>
+		<div class="footer">
 			<p class="small-print">Note that most BIP 353 addresses rely on at least <a href="https://bolt12.org">BOLT 12</a> or <a href="https://github.com/bitcoin/bips/blob/master/bip-0352.mediawiki">Silent Payments</a> and as both are relatively new, wallet support isn't yet universal. Check that your wallet supports at least one of the two if you are unable to pay.</p>
 			<p class="small-print">While you're absolutely trusting this site to not provide you with bad code, the code we promise we served you fully validates the name using DNSSEC. Thus, no matter what server you use to resolve the name, the worst they can do is log who you're paying or tell you they're not payable. They can never lie and give you the wrong address!</p>
 			<p class="small-print">Make this site beautiful by <a href="https://github.com/TheBlueMatt/satsto.me">editing it on Github</a></p>
-		</span>
+		</div>
 
 		<!-- dnssec_prover_wasm.js comes from running wasm-pack build --target web` in the `wasmpack` folder in dnssec-prover -->
 		<script type="module" src="dnssec_prover_wasm.js"></script>
@@ -84,31 +155,31 @@
 					const addr_parts = address_box.value.split("@");
 					if (addr_parts.length != 2) {
 						document.getElementById("paybutton").disabled = true;
-						document.getElementById("result").innerHTML = "Address should have exactly one @";
+						document.getElementById("errors").innerHTML = "Address should have exactly one @";
 						return true;
 					}
 					if (addr_parts[0].length == 0) {
 						document.getElementById("paybutton").disabled = true;
-						document.getElementById("result").innerHTML = "Missing user part";
+						document.getElementById("errors").innerHTML = "Missing user part";
 						return true;
 					}
 					if (addr_parts[1].length == 0) {
 						document.getElementById("paybutton").disabled = true;
-						document.getElementById("result").innerHTML = "Missing domain";
+						document.getElementById("errors").innerHTML = "Missing domain";
 						return true;
 					}
 					if (!/^[\p{ASCII}]*$/u.test(addr_parts[0])) {
 						document.getElementById("paybutton").disabled = true;
-						document.getElementById("result").innerHTML = "To protect against <a href='https://en.wikipedia.org/wiki/IDN_homograph_attack'>Homograph Attacks</a>, the user part of addres must be ASCII";
+						document.getElementById("errors").innerHTML = "To protect against <a href='https://en.wikipedia.org/wiki/IDN_homograph_attack'>Homograph Attacks</a>, the user part of addres must be ASCII";
 						return true;
 					}
 					if (!/^[\p{ASCII}]*$/u.test(addr_parts[1])) {
 						document.getElementById("paybutton").disabled = true;
-						document.getElementById("result").innerHTML = "To protect against <a href='https://en.wikipedia.org/wiki/IDN_homograph_attack'>Homograph Attacks</a>, the domain part of addres must be ASCII";
+						document.getElementById("errors").innerHTML = "To protect against <a href='https://en.wikipedia.org/wiki/IDN_homograph_attack'>Homograph Attacks</a>, the domain part of addres must be ASCII";
 						return true;
 					}
 					document.getElementById("paybutton").disabled = false;
-					document.getElementById("result").innerHTML = "";
+					document.getElementById("errors").innerHTML = "";
 					return true;
 				}
 				document.getElementById("address").onchange = check_text;
@@ -125,6 +196,11 @@
 						lookup_doh(address_box.value, dom, source);
 					}
 				}
+				const set_result = function(val) {
+					const result_div = document.getElementById("result");
+					result_div.innerHTML = val;
+					result_div.classList.add("result-populated");
+				}
 				window.lookup_http = function(addr, dom) {
 					var request = "https://http-dns-prover.as397444.net/dnssecproof?d=" + dom + "&t=txt";
 					fetch(request).then((resp) => {
@@ -133,64 +209,62 @@
 							var result = verify_byte_stream(buf, dom);
 							handle_result(addr, JSON.parse(result));
 						}, () => {
-							document.getElementById("result").innerHTML = "Failed to read proof from server";
+							set_result("Failed to read proof from server");
 						})
 					}, (e) => {
-						document.getElementById("result").innerHTML = "Failed to fetch proof: " + e;
+						set_result("Failed to fetch proof: " + e);
 					});
 				}
 				window.lookup_doh = function(addr, dom, doh_endpoint) {
 					doh.lookup_doh(dom, "txt", doh_endpoint).then((res) => {
 						handle_result(addr, res);
 					}, (e) => {
-						document.getElementById("result").innerHTML = "Failed to fetch proof: " + e;
+						set_result("Failed to fetch proof: " + e);
 					});
 				}
 				window.handle_result = function(name, result) {
 					if (!result.hasOwnProperty("valid_from") || !result.hasOwnProperty("expires") || !result.hasOwnProperty("verified_rrs")) {
-						document.getElementById("result").innerHTML = "Failed to fetch valid proof";
+						set_result("Failed to fetch valid proof");
 						return;
 					}
 					if (Date.now() / 1000 < result.valid_from) {
-						document.getElementById("result").innerHTML = "Proof is not yet valid (check your system clock)";
+						set_result("Proof is not yet valid (check your system clock)");
 						return;
 					}
 					if (Date.now() / 1000 > result.expires) {
-						document.getElementById("result").innerHTML = "Proof has expired (check your system clock?)";
+						set_result("Proof has expired (check your system clock?)");
 						return;
 					}
 					var bip353 = null;
 					for (const rr of result.verified_rrs) {
 						if (rr.type != "txt") {
-							document.getElementById("result").innerHTML = "Proof was invalid";
+							set_result("Proof was invalid");
 							return;
 						}
 						if (typeof rr.contents === "string" && rr.contents.toLowerCase().startsWith("bitcoin:")) {
 							if (bip353 !== null) {
-								document.getElementById("result").innerHTML = "Address is BIP 353-invalid - it contains multiple results";
+								set_result("Address is BIP 353-invalid - it contains multiple results");
 								return;
 							}
 							bip353 = rr.contents;
 						}
 					}
 					if (bip353 === null) {
-						document.getElementById("result").innerHTML = "Address is BIP 353-invalid - it contains no bitcoin: URI";
+						set_result("Address is BIP 353-invalid - it contains no bitcoin: URI");
 						return;
 					}
 					var addr_ty_table = "";
 					var addr_idx = 0;
 					const base_and_params = bip353.substring(8).split("?");
 					const push_table_entry = function(ty, uri_pfx, contents) {
-						var value = "";
+						var value = "<h2 class='address-type'>" + ty + "<a class='address-copy' id='addr_copy_" + addr_idx + "' href='#' onclick=\"copy('" + contents + "', " + addr_idx + ")\">" + CLIPBOARD_SVG + "</a></h2>";
 						if (!/^[\p{ASCII}]*$/u.test(contents)) {
 							value = "Invalid";
-						} else if (contents.length < 70) {
-							value = "<a class='address-link' href='bitcoin:" + uri_pfx + contents + "'>" + contents + "</a><a class='address-copy' id='addr_copy_" + addr_idx + "' onclick=\"copy('" + contents + "', " + addr_idx + ")\">" + CLIPBOARD_SVG + "</a>";
 						} else {
-							value = "<a class='address-link' href='bitcoin:" + uri_pfx + contents + "'>" + contents.substring(0, 70) + "...</a><a class='address-copy' id='addr_copy_" + addr_idx + "' onclick=\"copy('" + contents + "', " + addr_idx + ")\">" + CLIPBOARD_SVG + "</a>";
+							value += "<a class='address-link' href='bitcoin:" + uri_pfx + contents + "'>" + contents + "</a>";
 						}
 						addr_idx += 1;
-						addr_ty_table += "<div class='address-card'><span class='address-type'>" + ty + "</span>" + value + "</div>";
+						addr_ty_table += "<div class='address-card'>" + value + "</div><br>";
 					};
 					if (base_and_params[0].length != 0) {
 						push_table_entry("On-Chain Non-Private Address", "", base_and_params[0]);
@@ -207,11 +281,11 @@
 							}
 						}
 					}
-					const result_elem = document.getElementById("result");
-					result_elem.innerHTML = "<a href=\"" + bip353 + "\">Opening your bitcoin wallet to pay " + name + "! If it doesn't work, click here.</a>";
+					var res = "<h2>It works!</h2>" + name + " was successfully resolved to the following addresses.<br>Your wallet should have automatically opened to pay, but if not, <a href=\"" + bip353 + "\">click here to do so.</a>";
 					if (addr_ty_table != "") {
-						result_elem.innerHTML += "<br>" + addr_ty_table;
+						res += "<br>" + addr_ty_table;
 					}
+					set_result(res);
 					window.location = bip353;
 				}
 				window.copy = function(text, element_id) {
