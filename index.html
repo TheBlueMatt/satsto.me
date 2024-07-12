@@ -173,7 +173,40 @@
 						document.getElementById("result").innerHTML = "Address is BIP 353-invalid - it contains no bitcoin: URI";
 						return;
 					}
-					document.getElementById("result").innerHTML = "<a href=\"" + bip353 + "\">Opening your bitcoin wallet to pay " + name + "! If it doesn't work, click here.</a>";
+					var addr_ty_table = "";
+					const base_and_params = bip353.substring(8).split("?");
+					if (base_and_params[0].length != 0) {
+						if (!/^[\p{ASCII}]*$/u.test(base_and_params[0])) {
+							addr_ty_table += "<tr><th>On-Chain Non-Private Address</th><th>Invalid</th></tr>";
+						} else {
+							addr_ty_table += "<tr><th>On-Chain Non-Private Address</th><th><a href='bitcoin:" + base_and_params[0] + "'>" + base_and_params[0] + "</a></th></tr>";
+						}
+					}
+					if (base_and_params.length > 1 && base_and_params[1].length > 0) {
+						for (const param of base_and_params[1].split("&")) {
+							const key_value = param.split("=");
+							if (key_value.length == 2 && key_value[1].length != 0) {
+								var value = "";
+								if (!/^[\p{ASCII}]*$/u.test(key_value[1])) {
+									value = "<th>Invalid</th>";
+								} else if (key_value[1].length < 75) {
+									value = "<th><a href='bitcoin:?" + key_value[0] + "=" + key_value[1] + "'>" + key_value[1] + "</a></th>";
+								} else {
+									value = "<th><a href='bitcoin:?" + key_value[0] + "=" + key_value[1] + "'>" + key_value[1].substring(0, 75) + "...</a></th>";
+								}
+								if (key_value[0] == "lno") {
+									addr_ty_table += "<tr><th>BOLT 12 Offer</th>" + value + "</tr>";
+								} else if (key_value[0] == "sp") {
+									addr_ty_table += "<tr><th>Silent Payments</th>" + value + "</tr>";
+								}
+							}
+						}
+					}
+					const result_elem = document.getElementById("result");
+					result_elem.innerHTML = "<a href=\"" + bip353 + "\">Opening your bitcoin wallet to pay " + name + "! If it doesn't work, click here.</a>";
+					if (addr_ty_table != "") {
+						result_elem.innerHTML += "<br><table><tr><th>Type</th><th>Address</th></tr>" + addr_ty_table + "</table>";
+					}
 					window.location = bip353;
 				}
 			});
