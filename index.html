@@ -57,6 +57,12 @@
 				.right-header {
 					padding: 30px 30px 20px 30px !important;
 				}
+				.text-box {
+					background: #3B6367;
+					border: none;
+					color: white;
+					font-size: 1em;
+				}
 			}
 			.right-header {
 				padding: 15px;
@@ -121,8 +127,11 @@
 			<div class="right-header">
 				<form onsubmit="return false;" method="post">
 				<div class="fill">
-					₿<input class="fill-use" type="text" id="address" value="matt@satsto.me"/>
-					<input type="submit" class="button" onclick="lookup_domain()" id="paybutton" value="Pay" />
+					₿<input class="fill-use text-box" type="text" id="address" value="matt@satsto.me"/>
+					<!-- SVG from bootstrap icons, Copyright (c) 2019-2024 The Bootstrap Authors, MIT License -->
+					<svg onclick="lookup_domain()" style="cursor:pointer" id="paybutton" xmlns="http://www.w3.org/2000/svg" height="1.5em" fill="white" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
+						<path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
+					</svg>
 				</div>
 				<div>
 					Resolve name using&nbsp;<select id="server">
