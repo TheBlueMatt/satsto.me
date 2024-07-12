@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 		<style type="text/css">
 			body {
-				margin:40px auto;
+				margin:30px auto;
 				max-width:660px;
 				line-height:1.6;
 				font-size:14pt;
@@ -174,30 +174,31 @@
 						return;
 					}
 					var addr_ty_table = "";
+					var addr_idx = 0;
 					const base_and_params = bip353.substring(8).split("?");
-					if (base_and_params[0].length != 0) {
-						if (!/^[\p{ASCII}]*$/u.test(base_and_params[0])) {
-							addr_ty_table += "<tr><th>On-Chain Non-Private Address</th><th>Invalid</th></tr>";
+					const push_table_entry = function(ty, uri_pfx, contents) {
+						var value = "";
+						if (!/^[\p{ASCII}]*$/u.test(contents)) {
+							value = "<th>Invalid</th><th></th>";
+						} else if (contents.length < 70) {
+							value = "<th><a href='bitcoin:" + uri_pfx + contents + "'>" + contents + "</a></th><th><a href='#' id='addr_copy_" + addr_idx + "' onclick=\"copy('" + contents + "', " + addr_idx + ")\">Copy</a></th>";
 						} else {
-							addr_ty_table += "<tr><th>On-Chain Non-Private Address</th><th><a href='bitcoin:" + base_and_params[0] + "'>" + base_and_params[0] + "</a></th></tr>";
+							value = "<th><a href='bitcoin:" + uri_pfx + contents + "'>" + contents.substring(0, 70) + "...</a></th><th><a href='#' id='addr_copy_" + addr_idx + "' onclick=\"copy('" + contents + "', " + addr_idx + ")\">Copy</a></th>";
 						}
+						addr_idx += 1;
+						addr_ty_table += "<tr><th>" + ty + "</th>" + value + "</tr>";
+					};
+					if (base_and_params[0].length != 0) {
+						push_table_entry("On-Chain Non-Private Address", "", base_and_params[0]);
 					}
 					if (base_and_params.length > 1 && base_and_params[1].length > 0) {
 						for (const param of base_and_params[1].split("&")) {
 							const key_value = param.split("=");
 							if (key_value.length == 2 && key_value[1].length != 0) {
-								var value = "";
-								if (!/^[\p{ASCII}]*$/u.test(key_value[1])) {
-									value = "<th>Invalid</th>";
-								} else if (key_value[1].length < 75) {
-									value = "<th><a href='bitcoin:?" + key_value[0] + "=" + key_value[1] + "'>" + key_value[1] + "</a></th>";
-								} else {
-									value = "<th><a href='bitcoin:?" + key_value[0] + "=" + key_value[1] + "'>" + key_value[1].substring(0, 75) + "...</a></th>";
-								}
 								if (key_value[0] == "lno") {
-									addr_ty_table += "<tr><th>BOLT 12 Offer</th>" + value + "</tr>";
+									push_table_entry("BOLT 12 Offer", "?lno=", key_value[1]);
 								} else if (key_value[0] == "sp") {
-									addr_ty_table += "<tr><th>Silent Payments</th>" + value + "</tr>";
+									push_table_entry("On-Chain Silent Payment", "?sp=", key_value[1]);
 								}
 							}
 						}
@@ -205,9 +206,13 @@
 					const result_elem = document.getElementById("result");
 					result_elem.innerHTML = "<a href=\"" + bip353 + "\">Opening your bitcoin wallet to pay " + name + "! If it doesn't work, click here.</a>";
 					if (addr_ty_table != "") {
-						result_elem.innerHTML += "<br><table><tr><th>Type</th><th>Address</th></tr>" + addr_ty_table + "</table>";
+						result_elem.innerHTML += "<br><table><tr><th>Type</th><th>Address</th><th></th></tr>" + addr_ty_table + "</table>";
 					}
 					window.location = bip353;
+				}
+				window.copy = function(text, element_id) {
+					navigator.clipboard.writeText(text);
+					document.getElementById("addr_copy_" + element_id).innerText = "Copied!";
 				}
 			});
 		</script>
