@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+		<style type="text/css">
+			body {
+				margin:40px auto;
+				max-width:660px;
+				line-height:1.6;
+				font-size:14pt;
+				color:#444;
+				padding:0 10px;
+			}
+			h1, h2, h3 {
+				line-height: 1.2;
+			}
+			.fill {
+				display: flex;
+			}
+			.fill-use {
+				flex: 1;
+			}
+			.small-print, .errors {
+				font-size:11pt;
+			}
+			.button, .errors {
+				width: fit-content;
+				margin-left: auto;
+				margin-right: auto;
+				display: block;
+			}
+		</style>
+		<title>Provable DNS Querying</title>
+	</head>
+	<body>
+		<h2>
+			BIP 353 Human Readable Names Resolver
+		</h2>
+		<p>
+			<a href="https://github.com/bitcoin/bips/blob/master/bip-0353.mediawiki">BIP 353</a> defines the way to encode simple human-readable names and map them to Bitcoin payment intructions.
+		<p>
+			If your wallet doesn't yet resolve BIP 353 names natively, this site will resolve them for you, letting you pay human readable names seamlessly.
+		</p>
+		<p>
+			<form onsubmit="return false;" method="post">
+			<div class="fill">
+				₿
+				
+				<input class="fill-use" type="text" id="address" value="matt@satsto.me"/><br>
+			</div>
+			<div>
+				Resolve name using&nbsp;<select id="server">
+					<option value="https://dns.google/dns-query">Google's 8.8.8.8 Public DNS server</option>
+					<option value="http">satsto.me's native DNS proof server</option>
+					<option value="https://1.1.1.1/dns-query">Cloudflare's 1.1.1.1 Public DNS server</option>
+				</select>
+			</div>
+			<div class="errors" id="result"></div>
+			<input type="submit" class="button" onclick="lookup_domain()" id="paybutton" value="Pay" />
+		</p>
+		<p></p>
+		<p class="small-print">Note that most BIP 353 addresses rely on at least <a href="https://bolt12.org">BOLT 12</a> or <a href="https://github.com/bitcoin/bips/blob/master/bip-0352.mediawiki">Silent Payments</a> and as both are relatively new, wallet support isn't yet universal. Check that your wallet supports at least one of the two if you are unable to pay.</p>
+		<p class="small-print">While you're absolutely trusting this site to not provide you with bad code, the code we promise we served you fully validates the name using DNSSEC. Thus, no matter what server you use to resolve the name, the worst they can do is log who you're paying or tell you they're not payable. They can never lie and give you the wrong address!</p>
+
+		<!-- dnssec_prover_wasm.js comes from running wasm-pack build --target web` in the `wasmpack` folder in dnssec-prover -->
+		<script type="module" src="dnssec_prover_wasm.js"></script>
+		<!-- doh_lookup.js comes from the `wasmpack` folder in the above git repo -->
+		<script type="module" src="doh_lookup.js"></script>
+		<script type="module">
+			import init, {verify_byte_stream} from './dnssec_prover_wasm.js';
+			import * as doh from './doh_lookup.js';
+			init().then(() => {
+				const address_box = document.getElementById("address");
+				const check_text = function() {
+					if (address_box.value.startsWith("₿")) {
+						address_box.value = address_box.value.substring(1);
+					}
+					const addr_parts = address_box.value.split("@");
+					if (addr_parts.length != 2) {
+						document.getElementById("paybutton").disabled = true;
+						document.getElementById("result").innerHTML = "Address should have exactly one @";
+						return true;
+					}
+					if (addr_parts[0].length == 0) {
+						document.getElementById("paybutton").disabled = true;
+						document.getElementById("result").innerHTML = "Missing user part";
+						return true;
+					}
+					if (addr_parts[1].length == 0) {
+						document.getElementById("paybutton").disabled = true;
+						document.getElementById("result").innerHTML = "Missing domain";
+						return true;
+					}
+					if (!/^[\p{ASCII}]*$/u.test(addr_parts[0])) {
+						document.getElementById("paybutton").disabled = true;
+						document.getElementById("result").innerHTML = "User part of addres must be ASCII";
+						return true;
+					}
+					if (!/^[\p{ASCII}]*$/u.test(addr_parts[1])) {
+						document.getElementById("paybutton").disabled = true;
+						document.getElementById("result").innerHTML = "Domain part of address must be ASCII";
+						return true;
+					}
+					document.getElementById("paybutton").disabled = false;
+					document.getElementById("result").innerHTML = "";
+					return true;
+				}
+				document.getElementById("address").onchange = check_text;
+				document.getElementById("address").onkeypress = check_text;
+				document.getElementById("address").oninput = check_text;
+				window.lookup_domain = function() {
+					const addr_parts = address_box.value.split("@");
+					var dom = addr_parts[0] + ".user._bitcoin-payment." + addr_parts[1];
+					if (!dom.endsWith(".")) dom += ".";
+					var source = document.getElementById("server").value;
+					if (source == "http") {
+						lookup_http(address_box.value, dom);
+					} else {
+						lookup_doh(address_box.value, dom, source);
+					}
+				}
+				window.lookup_http = function(addr, dom) {
+					var request = "https://http-dns-prover.as397444.net/dnssecproof?d=" + dom + "&t=txt";
+					fetch(request).then((resp) => {
+						resp.arrayBuffer().then((array) => {
+							var buf = new Uint8Array(array);
+							var result = verify_byte_stream(buf, dom);
+							handle_result(addr, JSON.parse(result));
+						}, () => {
+							document.getElementById("result").innerHTML = "Failed to read proof from server";
+						})
+					}, (e) => {
+						document.getElementById("result").innerHTML = "Failed to fetch proof: " + e;
+					});
+				}
+				window.lookup_doh = function(addr, dom, doh_endpoint) {
+					doh.lookup_doh(dom, "txt", doh_endpoint).then((res) => {
+						handle_result(addr, res);
+					}, (e) => {
+						document.getElementById("result").innerHTML = "Failed to fetch proof: " + e;
+					});
+				}
+				window.handle_result = function(name, result) {
+					if (!result.hasOwnProperty("valid_from") || !result.hasOwnProperty("expires") || !result.hasOwnProperty("verified_rrs")) {
+						document.getElementById("result").innerHTML = "Failed to fetch valid proof";
+						return;
+					}
+					if (Date.now() / 1000 < result.valid_from) {
+						document.getElementById("result").innerHTML = "Proof is not yet valid (check your system clock)";
+						return;
+					}
+					if (Date.now() / 1000 > result.expires) {
+						document.getElementById("result").innerHTML = "Proof has expired (check your system clock?)";
+						return;
+					}
+					var bip353 = null;
+					for (const rr of result.verified_rrs) {
+						if (rr.type != "txt") {
+							document.getElementById("result").innerHTML = "Proof was invalid";
+							return;
+						}
+						if (typeof rr.contents === "string" && rr.contents.toLowerCase().startsWith("bitcoin:")) {
+							if (bip353 !== null) {
+								document.getElementById("result").innerHTML = "Address is BIP 353-invalid - it contains multiple results";
+								return;
+							}
+							bip353 = rr.contents;
+						}
+					}
+					if (bip353 === null) {
+						document.getElementById("result").innerHTML = "Address is BIP 353-invalid - it contains no bitcoin: URI";
+						return;
+					}
+					document.getElementById("result").innerHTML = "<a href=\"" + bip353 + "\">Opening your bitcoin wallet to pay " + name + "! If it doesn't work, click here.</a>";
+					window.location = bip353;
+				}
+			});
+		</script>
+		</script>
+	</body>
+</html>
