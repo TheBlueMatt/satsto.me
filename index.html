@@ -183,14 +183,14 @@
 					const push_table_entry = function(ty, uri_pfx, contents) {
 						var value = "";
 						if (!/^[\p{ASCII}]*$/u.test(contents)) {
-							value = "<th>Invalid</th><th></th>";
+							value = "Invalid";
 						} else if (contents.length < 70) {
-							value = "<th><a href='bitcoin:" + uri_pfx + contents + "'>" + contents + "</a></th><th><a href='#' id='addr_copy_" + addr_idx + "' onclick=\"copy('" + contents + "', " + addr_idx + ")\">" + CLIPBOARD_SVG + "</a></th>";
+							value = "<a class='address-link' href='bitcoin:" + uri_pfx + contents + "'>" + contents + "</a><a class='address-copy' id='addr_copy_" + addr_idx + "' onclick=\"copy('" + contents + "', " + addr_idx + ")\">" + CLIPBOARD_SVG + "</a>";
 						} else {
-							value = "<th><a href='bitcoin:" + uri_pfx + contents + "'>" + contents.substring(0, 70) + "...</a></th><th><a href='#' id='addr_copy_" + addr_idx + "' onclick=\"copy('" + contents + "', " + addr_idx + ")\">" + CLIPBOARD_SVG + "</a></th>";
+							value = "<a class='address-link' href='bitcoin:" + uri_pfx + contents + "'>" + contents.substring(0, 70) + "...</a><a class='address-copy' id='addr_copy_" + addr_idx + "' onclick=\"copy('" + contents + "', " + addr_idx + ")\">" + CLIPBOARD_SVG + "</a>";
 						}
 						addr_idx += 1;
-						addr_ty_table += "<tr><th>" + ty + "</th>" + value + "</tr>";
+						addr_ty_table += "<div class='address-card'><span class='address-type'>" + ty + "</span>" + value + "</div>";
 					};
 					if (base_and_params[0].length != 0) {
 						push_table_entry("On-Chain Non-Private Address", "", base_and_params[0]);
@@ -210,7 +210,7 @@
 					const result_elem = document.getElementById("result");
 					result_elem.innerHTML = "<a href=\"" + bip353 + "\">Opening your bitcoin wallet to pay " + name + "! If it doesn't work, click here.</a>";
 					if (addr_ty_table != "") {
-						result_elem.innerHTML += "<br><table><tr><th>Type</th><th>Address</th><th></th></tr>" + addr_ty_table + "</table>";
+						result_elem.innerHTML += "<br>" + addr_ty_table;
 					}
 					window.location = bip353;
 				}
