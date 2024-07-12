@@ -37,17 +37,17 @@
 		<h2>
 			BIP 353 Human Readable Names Resolver
 		</h2>
-		<p>
-			<a href="https://github.com/bitcoin/bips/blob/master/bip-0353.mediawiki">BIP 353</a> defines the way to encode simple human-readable names and map them to Bitcoin payment intructions.
-		<p>
-			If your wallet doesn't yet resolve BIP 353 names natively, this site will resolve them for you, letting you pay human readable names seamlessly.
-		</p>
-		<p>
+		<span class="intro-text">
+			<p>
+				<a href="https://github.com/bitcoin/bips/blob/master/bip-0353.mediawiki">BIP 353</a> defines the way to encode simple human-readable names and map them to Bitcoin payment intructions.
+			<p>
+				If your wallet doesn't yet resolve BIP 353 names natively, this site will resolve them for you, letting you pay human readable names seamlessly.
+			</p>
+		</span>
+		<p class="input-result">
 			<form onsubmit="return false;" method="post">
 			<div class="fill">
-				₿
-				
-				<input class="fill-use" type="text" id="address" value="matt@satsto.me"/><br>
+				₿<input class="fill-use" type="text" id="address" value="matt@satsto.me"/><br>
 			</div>
 			<div>
 				Resolve name using&nbsp;<select id="server">
@@ -60,9 +60,11 @@
 			<input type="submit" class="button" onclick="lookup_domain()" id="paybutton" value="Pay" />
 		</p>
 		<p></p>
-		<p class="small-print">Note that most BIP 353 addresses rely on at least <a href="https://bolt12.org">BOLT 12</a> or <a href="https://github.com/bitcoin/bips/blob/master/bip-0352.mediawiki">Silent Payments</a> and as both are relatively new, wallet support isn't yet universal. Check that your wallet supports at least one of the two if you are unable to pay.</p>
-		<p class="small-print">While you're absolutely trusting this site to not provide you with bad code, the code we promise we served you fully validates the name using DNSSEC. Thus, no matter what server you use to resolve the name, the worst they can do is log who you're paying or tell you they're not payable. They can never lie and give you the wrong address!</p>
-		<p class="small-print">Make this site beautiful by <a href="https://github.com/TheBlueMatt/satsto.me">editing it on Github</a></p>
+		<span class="footer">
+			<p class="small-print">Note that most BIP 353 addresses rely on at least <a href="https://bolt12.org">BOLT 12</a> or <a href="https://github.com/bitcoin/bips/blob/master/bip-0352.mediawiki">Silent Payments</a> and as both are relatively new, wallet support isn't yet universal. Check that your wallet supports at least one of the two if you are unable to pay.</p>
+			<p class="small-print">While you're absolutely trusting this site to not provide you with bad code, the code we promise we served you fully validates the name using DNSSEC. Thus, no matter what server you use to resolve the name, the worst they can do is log who you're paying or tell you they're not payable. They can never lie and give you the wrong address!</p>
+			<p class="small-print">Make this site beautiful by <a href="https://github.com/TheBlueMatt/satsto.me">editing it on Github</a></p>
+		</span>
 
 		<!-- dnssec_prover_wasm.js comes from running wasm-pack build --target web` in the `wasmpack` folder in dnssec-prover -->
 		<script type="module" src="dnssec_prover_wasm.js"></script>
