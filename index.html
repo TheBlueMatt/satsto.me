@@ -95,12 +95,12 @@
 					}
 					if (!/^[\p{ASCII}]*$/u.test(addr_parts[0])) {
 						document.getElementById("paybutton").disabled = true;
-						document.getElementById("result").innerHTML = "User part of addres must be ASCII";
+						document.getElementById("result").innerHTML = "To protect against <a href='https://en.wikipedia.org/wiki/IDN_homograph_attack'>Homograph Attacks</a>, the user part of addres must be ASCII";
 						return true;
 					}
 					if (!/^[\p{ASCII}]*$/u.test(addr_parts[1])) {
 						document.getElementById("paybutton").disabled = true;
-						document.getElementById("result").innerHTML = "Domain part of address must be ASCII";
+						document.getElementById("result").innerHTML = "To protect against <a href='https://en.wikipedia.org/wiki/IDN_homograph_attack'>Homograph Attacks</a>, the domain part of addres must be ASCII";
 						return true;
 					}
 					document.getElementById("paybutton").disabled = false;
