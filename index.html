@@ -14,7 +14,7 @@
 				font-family: sans;
 			}
 			h1, h2, h3 {
-				margin-top: 0;
+				margin: 0 0 6px 0;
 				line-height: 1.2;
 			}
 			a { color: inherit; }
@@ -52,7 +52,7 @@
 				}
 				.result {
 					height: 100%;
-					padding: 2.5% 2.5%;
+					padding: 20px 30px 30px 30px !important;
 				}
 				.right-header {
 					padding: 30px 30px 20px 30px !important;
@@ -82,8 +82,8 @@
 				display: block;
 			}
 			.address-card {
-				padding: 4px 16px;
-				margin: 4px 8px;
+				padding: 15px;
+				margin: 15px 0;
 				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 				border-radius: 7px;
 				background: white;
@@ -95,9 +95,11 @@
 				overflow: hidden;
 				display: inline-block;
 				width: 100%;
+				margin-bottom: -5px;
 			}
 			.address-type {
 				color: black;
+				margin-bottom: 2px;
 			}
 			.address-copy {
 				float: right;
@@ -266,7 +268,7 @@
 							value += "<a class='address-link' href='bitcoin:" + uri_pfx + contents + "'>" + contents + "</a>";
 						}
 						addr_idx += 1;
-						addr_ty_table += "<div class='address-card'>" + value + "</div><br>";
+						addr_ty_table += "<div class='address-card'>" + value + "</div>";
 					};
 					if (base_and_params[0].length != 0) {
 						push_table_entry("On-Chain Non-Private Address", "", base_and_params[0]);
