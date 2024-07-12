@@ -49,13 +49,21 @@
 					display: flex;
 					flex-direction: column;
 					min-height: 100%;
+					border-left: 1px solid #528080;
 				}
 				.result {
 					height: 100%;
 					padding: 20px 30px 30px 30px !important;
+					border-top: 1px solid #528080;
+				}
+				.right-header-paragraph, .right-header-second-paragraph {
+					padding: 0 30px;
+				}
+				.right-header-second-paragraph {
+					border-top: 1px solid #528080;
 				}
 				.right-header {
-					padding: 30px 30px 20px 30px !important;
+					padding: 30px 0 20px 0 !important;
 				}
 				.text-box {
 					background: #3B6367;
@@ -126,21 +134,21 @@
 		<div class="right">
 			<div class="right-header">
 				<form onsubmit="return false;" method="post">
-				<div class="fill">
+				<div class="fill right-header-paragraph">
 					₿<input class="fill-use text-box" type="text" id="address" value="matt@satsto.me"/>
 					<!-- SVG from bootstrap icons, Copyright (c) 2019-2024 The Bootstrap Authors, MIT License -->
 					<svg onclick="lookup_domain()" style="cursor:pointer" id="paybutton" xmlns="http://www.w3.org/2000/svg" height="1.5em" fill="white" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
 						<path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
 					</svg>
 				</div>
-				<div>
+				<div class="errors right-header-paragraph" id="errors"></div>
+				<div class="right-header-second-paragraph">
 					Resolve name using&nbsp;<select id="server">
 						<option value="https://dns.google/dns-query">Google's 8.8.8.8 Public DNS server</option>
 						<option value="http">satsto.me's native DNS proof server</option>
 						<option value="https://1.1.1.1/dns-query">Cloudflare's 1.1.1.1 Public DNS server</option>
 					</select>
 				</div>
-				<div class="errors" id="errors"></div>
 			</div>
 			<div class="result" id="result"></div>
 		</div>
