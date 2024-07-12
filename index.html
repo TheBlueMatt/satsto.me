@@ -18,6 +18,7 @@
 				line-height: 1.2;
 			}
 			a { color: inherit; }
+			.center-contents { display: flex; width: 100%; justify-content: center; }
 			.fill { display: flex; }
 			.fill-use { flex: 1; }
 			.intro-text { color: white; }
@@ -74,6 +75,12 @@
 					border: none;
 					color: white;
 					font-size: 1em;
+				}
+				.dropdown {
+					background: #3B6367;
+					border: none;
+					color: white;
+					font-size: 12pt;
 				}
 			}
 			.right-header {
@@ -150,11 +157,11 @@
 					</svg>
 				</div>
 				<div class="errors right-header-paragraph" id="errors"></div>
-				<div class="right-header-second-paragraph">
-					Resolve name using&nbsp;<select id="server">
-						<option value="https://dns.google/dns-query">Google's 8.8.8.8 Public DNS server</option>
-						<option value="http">satsto.me's native DNS proof server</option>
-						<option value="https://1.1.1.1/dns-query">Cloudflare's 1.1.1.1 Public DNS server</option>
+				<div class="right-header-second-paragraph center-contents">
+					<select id="server" class="dropdown">
+						<option value="https://dns.google/dns-query">Look up using 8.8.8.8</option>
+						<option value="http">Look up using satsto.me's native proof server</option>
+						<option value="https://1.1.1.1/dns-query">Look up using 1.1.1.1</option>
 					</select>
 				</div>
 			</div>
