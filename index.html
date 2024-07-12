@@ -100,6 +100,7 @@
 			}
 			.address-copy {
 				float: right;
+				cursor: pointer;
 			}
 		</style>
 		<title>BIP 353 Human Readable Names Resolver</title>
@@ -257,7 +258,7 @@
 					var addr_idx = 0;
 					const base_and_params = bip353.substring(8).split("?");
 					const push_table_entry = function(ty, uri_pfx, contents) {
-						var value = "<h2 class='address-type'>" + ty + "<a class='address-copy' id='addr_copy_" + addr_idx + "' href='#' onclick=\"copy('" + contents + "', " + addr_idx + ")\">" + CLIPBOARD_SVG + "</a></h2>";
+						var value = "<h2 class='address-type'>" + ty + "<a class='address-copy' id='addr_copy_" + addr_idx + "' onclick=\"copy('" + contents + "', " + addr_idx + ")\">" + CLIPBOARD_SVG + "</a></h2>";
 						if (!/^[\p{ASCII}]*$/u.test(contents)) {
 							value = "Invalid";
 						} else {
