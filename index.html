@@ -97,6 +97,10 @@
 				color: grey;
 				font-size: 11pt;
 			}
+			.mono {
+				font-family: mono;
+				font-size-adjust: 0.5;
+			}
 			.small-print {
 				color: white;
 				font-size: 11pt;
@@ -175,6 +179,7 @@
 			<div class="result" id="result"></div>
 		</div>
 		<div class="footer">
+			<p class="small-print">BIP 353 resolves DNS TXT records into bitcoin: URIs. Any standard (reusable) bitcoin: URI should work, for example a URI with a BOLT 12 offer (starting with lno), a Silent Payments Address (starting with sp), and an on-chain address may look like <span class="small-print mono">bitcoin:1OnChain?lno=lno1lightningoffer&amp;sp=sp1qsilentpayment</span></p>
 			<p class="small-print">Note that most BIP 353 names rely on <a href="https://bolt12.org">BOLT 12</a> or <a href="https://github.com/bitcoin/bips/blob/master/bip-0352.mediawiki">Silent Payments</a> and as both are relatively new, wallet support isn't yet universal.</p>
 			<p class="small-print">While you're absolutely trusting this site to not provide you with backdoored code, names are fully validated locally on your machine using DNSSEC. Thus, no matter what server you use to resolve the name, the worst they can do is log who you're paying or tell you they're not payable. They can never give you the wrong address!</p>
 			<p class="small-print">Make this site beautiful by <a href="https://github.com/TheBlueMatt/satsto.me">editing it on Github</a></p>
