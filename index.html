@@ -314,10 +314,10 @@
 						addr_idx += 1;
 						addr_ty_table += "<div class='address-card'>" + value + "</div>";
 					};
-					var res = "<h2>It works!</h2>" + name + " was successfully resolved to the following addresses.<br>Your wallet should have automatically opened to pay, but if not, <a href=\"" + bip353 + "\">click here to do so.</a>";
+					var res = "<h2>It works!</h2>" + name + " was successfully resolved to the following addresses.<p>Your wallet should have automatically opened to pay, but if not, <a href=\"" + bip353 + "\">click here to do so.</a></p>";
 					if (base_and_params[0].length != 0) {
 						if (base_and_params[0].startsWith("sp1q")) {
-							res += "<br>Note: the response included a Silent Payment address which was encoded in the \"body\" position in the URI (i.e. <span class='mono'>bitcoin:sp1q...</span>) rather than in the \"sp\" query parameter (i.e. <span class='mono'>bitcoin:?sp=sp1q...</span>). This is incorrect and may cause some wallets to fail to pay on-chain.";
+							res += "<p>Note: the response included a Silent Payment address which was encoded in the \"body\" position in the URI (i.e. <span class='mono'>bitcoin:sp1q...</span>) rather than in the \"sp\" query parameter (i.e. <span class='mono'>bitcoin:?sp=sp1q...</span>). This is incorrect and may cause some wallets to fail to pay on-chain.</p>";
 							push_table_entry("On-Chain Silent Payment", "", base_and_params[0]);
 						} else {
 							push_table_entry("On-Chain Non-Private Address", "", base_and_params[0]);
