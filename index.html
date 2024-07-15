@@ -20,7 +20,11 @@
 			a { color: inherit; }
 			.center-contents { display: flex; width: 100%; justify-content: center; }
 			.fill { display: flex; }
-			.fill-use { flex: 1; }
+			.fill-fixed { flex: 1 0; }
+			.fill-use-remaining {
+				flex: 0 1 100%;
+				min-width: 0;
+			}
 			.intro-text {
 				color: white;
 				padding: 15px 15px 0 15px;
@@ -92,7 +96,7 @@
 					font-size: 1.5em;
 				}
 				.bitcoin { font-size: 1.5em; }
-				.go-button { height: 2em !important; }
+				.go-button { min-width: 2em !important; }
 				.dropdown {
 					font-size: 12pt;
 				}
@@ -126,7 +130,10 @@
 				cursor: default;
 				opacity: 0.2;
 			}
-			.go-button { height: 1.5em; }
+			.go-button {
+				cursor: pointer;
+				min-width: 1.5em;
+			}
 			.mono {
 				font-family: mono;
 				font-size-adjust: 0.5;
@@ -197,10 +204,10 @@
 			<div class="right-header">
 				<form onsubmit="return false;" method="post">
 				<div class="fill right-header-paragraph">
-					<span class="bitcoin">₿</span>
-					<input class="fill-use text-box" type="text" id="address" value="matt@satsto.me"/>
+					<span class="bitcoin fill-fixed">₿</span>
+					<input class="fill-use-remaining text-box" type="text" id="address" value="matt@satsto.me"/>
 					<!-- SVG from bootstrap icons, Copyright (c) 2019-2024 The Bootstrap Authors, MIT License -->
-					<svg onclick="lookup_domain()" style="cursor:pointer" id="paybutton" xmlns="http://www.w3.org/2000/svg" fill="white" class="go-button" viewBox="0 0 16 16">
+					<svg onclick="lookup_domain()" id="paybutton" xmlns="http://www.w3.org/2000/svg" fill="white" class="go-button fill-fixed" viewBox="0 0 16 16">
 						<path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
 					</svg>
 				</div>
