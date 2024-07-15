@@ -115,6 +115,17 @@
 				background-color: rgba(255, 255, 255, 0.1);
 			}
 			.bitcoin { color: #80A0A0; }
+			.go-button:hover {
+				opacity: 0.85;
+				transform: scale(0.9, 0.9);
+			}
+			.go-button:active {
+				opacity: 1;
+			}
+			.go-button-disabled {
+				cursor: default;
+				opacity: 0.2;
+			}
 			.go-button { height: 1.5em; }
 			.mono {
 				font-family: mono;
@@ -229,31 +240,31 @@
 					}
 					const addr_parts = address_box.value.split("@");
 					if (addr_parts.length != 2) {
-						document.getElementById("paybutton").disabled = true;
+						document.getElementById("paybutton").classList.add("go-button-disabled");
 						document.getElementById("errors").innerHTML = "Address should have exactly one @";
 						return true;
 					}
 					if (addr_parts[0].length == 0) {
-						document.getElementById("paybutton").disabled = true;
+						document.getElementById("paybutton").classList.add("go-button-disabled");
 						document.getElementById("errors").innerHTML = "Missing user part";
 						return true;
 					}
 					if (addr_parts[1].length == 0) {
-						document.getElementById("paybutton").disabled = true;
+						document.getElementById("paybutton").classList.add("go-button-disabled");
 						document.getElementById("errors").innerHTML = "Missing domain";
 						return true;
 					}
 					if (!/^[\p{ASCII}]*$/u.test(addr_parts[0])) {
-						document.getElementById("paybutton").disabled = true;
+						document.getElementById("paybutton").classList.add("go-button-disabled");
 						document.getElementById("errors").innerHTML = "To protect against <a href='https://en.wikipedia.org/wiki/IDN_homograph_attack'>Homograph Attacks</a>, the user part of addres must be ASCII";
 						return true;
 					}
 					if (!/^[\p{ASCII}]*$/u.test(addr_parts[1])) {
-						document.getElementById("paybutton").disabled = true;
+						document.getElementById("paybutton").classList.add("go-button-disabled");
 						document.getElementById("errors").innerHTML = "To protect against <a href='https://en.wikipedia.org/wiki/IDN_homograph_attack'>Homograph Attacks</a>, the domain part of addres must be ASCII";
 						return true;
 					}
-					document.getElementById("paybutton").disabled = false;
+					document.getElementById("paybutton").classList.remove("go-button-disabled");
 					document.getElementById("errors").innerHTML = "";
 					return true;
 				}
