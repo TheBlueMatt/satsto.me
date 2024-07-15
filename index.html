@@ -6,7 +6,7 @@
 		<style type="text/css">
 			body {
 				margin: 0;
-				padding: 30px;
+				padding: 0;
 				line-height:1.6;
 				font-size:14pt;
 				color:#444;
@@ -21,26 +21,44 @@
 			.center-contents { display: flex; width: 100%; justify-content: center; }
 			.fill { display: flex; }
 			.fill-use { flex: 1; }
-			.intro-text { color: white; }
+			.intro-text {
+				color: white;
+				padding: 15px 15px 0 15px;
+				box-sizing: border-box;
+			}
+			.footer {
+				padding: 0 15px 15px 15px;
+				box-sizing: border-box;
+			}
+			.right-header {
+				padding: 15px 0 20px 0;
+				color: white;
+				background: #3B6367;
+			}
+			.right-header-paragraph {
+				padding: 0 30px 20px 30px;
+			}
+			.right-header-second-paragraph {
+				padding: 20px 20px 0 20px;
+				border-top: 1px solid #528080;
+				box-sizing: border-box;
+			}
 			@media screen and (min-width: 768px) {
 				body {
 					display: flex;
 					flex-flow: column wrap;
 					height: 100vh;
 					box-sizing: border-box;
-					padding: 0;
 				}
 				.intro-text {
 					max-width: calc(50% - 15px);
 					padding: 30px 40px 0 30px;
-					box-sizing: border-box;
 				}
 				.footer {
 					flex: 1;
 					max-width: calc(50% - 15px);
-					padding: 0 40px 30px 30px;
-					box-sizing: border-box;
 					min-height: 0;
+					padding: 0 40px 30px 30px;
 				}
 				.right {
 					flex: 1 0 50%;
@@ -52,6 +70,9 @@
 					min-height: 100%;
 					border-left: 1px solid #528080;
 				}
+				.right-header {
+					padding: 20px 0 20px 0;
+				}
 				.result {
 					height: 100%;
 					padding: 20px 30px 30px 30px !important;
@@ -60,16 +81,12 @@
 				.right-header-paragraph {
 					padding: 0 30px 30px 30px;
 				}
-				.errors {
-					padding: 0 45px;
-				}
 				.right-header-second-paragraph {
 					padding: 20px 30px 0 30px;
-					border-top: 1px solid #528080;
 					box-sizing: border-box;
 				}
 				.right-header {
-					padding: 30px 0 20px 0 !important;
+					padding: 30px 0 20px 0;
 				}
 				.text-box {
 					font-size: 1.5em;
@@ -79,6 +96,11 @@
 				.dropdown {
 					font-size: 12pt;
 				}
+			}
+			.errors {
+				color: grey;
+				font-size: 11pt;
+				padding: 0 45px;
 			}
 			.text-box, .dropdown {
 				background: transparent;
@@ -94,15 +116,6 @@
 			}
 			.bitcoin { color: #80A0A0; }
 			.go-button { height: 1.5em; }
-			.right-header {
-				padding: 15px;
-				color: white;
-				background: #3B6367;
-			}
-			.errors {
-				color: grey;
-				font-size: 11pt;
-			}
 			.mono {
 				font-family: mono;
 				font-size-adjust: 0.5;
