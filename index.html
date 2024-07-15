@@ -4,18 +4,52 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 		<style type="text/css">
+			@font-face {
+				font-family: "Manrope";
+				src: url('./fonts/Manrope-VariableFont_wght.ttf') format('woff2 supports variations'),
+				url('./fonts/Manrope-VariableFont_wght.ttf') format('woff2-variations');
+				font-weight: 200 800;
+			}
 			body {
 				margin: 0;
 				padding: 0;
 				line-height:1.6;
-				font-size:14pt;
+				font-size: 19px;
 				color:#444;
 				background: #49797E;
-				font-family: sans-serif;
+				font-family: Manrope, sans-serif;
 			}
-			h1, h2, h3 {
+			h1, h2 {
 				margin: 0 0 6px 0;
 				line-height: 1.2;
+				opacity: 1 !important;
+			}
+			h1 {
+				font-size: 35px;
+			}
+			h2 {
+				font-size: 24px;
+			}
+			.tiny-print {
+				font-size: 13px;
+				font-style: italic;
+				opacity: 0.6;
+			}
+			.small-print {
+				font-size: 15px;
+				opacity: 0.9;
+			}
+			.address-type {
+				font-size: 18px;
+			}
+			.address-link {
+				font-size: 13px;
+			}
+			.errors {
+				font-size: 16px;
+				opacity: 0.85;
+				padding: 0;
+				box-sizing: border-box;
 			}
 			a { color: inherit; }
 			.center-contents { display: flex; width: 100%; justify-content: center; }
@@ -40,12 +74,6 @@
 				border-top: 1px solid #528080;
 				box-sizing: border-box;
 			}
-			.errors {
-				color: grey;
-				font-size: 11pt;
-				padding: 0;
-				box-sizing: border-box;
-			}
 			.errors-filled {
 				padding: 0 45px 20px 45px;
 			}
@@ -53,6 +81,8 @@
 				background: transparent;
 				border: none;
 				color: white;
+				/* For some reason these don't inerhit by default */
+				font-family: inherit;
 			}
 			.text-box:hover, .dropdown:hover {
 				background-color: rgba(255, 255, 255, 0.05);
@@ -83,18 +113,11 @@
 			.small-print, .tiny-print {
 				color: white;
 			}
-			.tiny-print {
-				opacity: 0.6;
-				font-size: 10pt;
-				font-style: italic;
-			}
-			.small-print {
-				font-size: 11pt;
-			}
 			.result {
 				background: #2D4C4F;
 				color: white;
-				font-size: 12pt;
+				opacity: 0.9;
+				font-size: 17px;
 			}
 			.result-populated {
 				padding: 15px;
@@ -107,10 +130,13 @@
 			}
 			.address-card {
 				padding: 15px;
-				margin: 15px 0;
+				margin: 16px 0;
 				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 				border-radius: 7px;
 				background: white;
+			}
+			.address-card:first-of-type {
+				margin-top: 25px;
 			}
 			.address-link {
 				font-family: mono;
@@ -123,7 +149,7 @@
 			}
 			.address-type {
 				color: black;
-				margin-bottom: 2px;
+				margin-bottom: 4px;
 			}
 			.address-copy {
 				float: right;
@@ -180,7 +206,7 @@
 				.bitcoin { font-size: 1.5em; }
 				.go-button { min-width: 2em; }
 				.dropdown {
-					font-size: 12pt;
+					font-size: 17px;
 				}
 			}
 			@media screen and (max-width: 767px) {
@@ -206,7 +232,7 @@
 	</head>
 	<body>
 		<div class="intro-text">
-			<h2>BIP 353 Resolver</h2>
+			<h1>BIP 353 Resolver</h1>
 			<p>
 				<a href="https://github.com/bitcoin/bips/blob/master/bip-0353.mediawiki">BIP 353</a> defines the way to use simple human-readable names for Bitcoin payments.
 			<p>
@@ -382,7 +408,7 @@
 						addr_idx += 1;
 						addr_ty_table += "<div class='address-card'>" + value + "</div>";
 					};
-					var res = "<h2>It works!</h2>" + name + " was successfully resolved to the following addresses.<p>Your wallet should have automatically opened to pay, but if not, <a href=\"" + bip353 + "\">click here to do so.</a></p>";
+					var res = "<h2>It works!</h2><p>" + name + " was successfully resolved to the following addresses.</p><p>Your wallet should have automatically opened to pay, but if not, <a href=\"" + bip353 + "\">click here to do so.</a></p>";
 					if (base_and_params[0].length != 0) {
 						if (base_and_params[0].startsWith("sp1q")) {
 							res += "<p>Note: the response included a Silent Payment address which was encoded in the \"body\" position in the URI (i.e. <span class='mono'>bitcoin:sp1q...</span>) rather than in the \"sp\" query parameter (i.e. <span class='mono'>bitcoin:?sp=sp1q...</span>). This is incorrect and may cause some wallets to fail to pay on-chain.</p>";
@@ -404,7 +430,7 @@
 						}
 					}
 					if (addr_ty_table != "") {
-						res += "<br>" + addr_ty_table;
+						res += "" + addr_ty_table;
 					}
 					set_result(res);
 					window.location = bip353;
