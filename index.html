@@ -72,19 +72,25 @@
 					padding: 30px 0 20px 0 !important;
 				}
 				.text-box {
-					background: #3B6367;
-					border: none;
-					color: white;
 					font-size: 1.5em;
 				}
 				.bitcoin { font-size: 1.5em; }
 				.go-button { height: 2em !important; }
 				.dropdown {
-					background: #3B6367;
-					border: none;
-					color: white;
 					font-size: 12pt;
 				}
+			}
+			.text-box, .dropdown {
+				background: transparent;
+				border: none;
+				color: white;
+			}
+			.text-box:hover, .dropdown:hover {
+				background-color: rgba(255, 255, 255, 0.05);
+			}
+			.text-box:focus-visible {
+				outline: none;
+				background-color: rgba(255, 255, 255, 0.1);
 			}
 			.bitcoin { color: #80A0A0; }
 			.go-button { height: 1.5em; }
