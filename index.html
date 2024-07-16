@@ -83,11 +83,20 @@
 				background: transparent;
 				border: none;
 				color: white;
+				border-radius: 3px;
 				/* For some reason these don't inerhit by default */
 				font-family: inherit;
 			}
 			.text-box:hover, .dropdown:hover {
 				background-color: rgba(255, 255, 255, 0.05);
+			}
+			.dropdown {
+				appearance: none;
+				background-image: url('data:image/svg+xml,<svg viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.253 0.69723C11.0578 0.501967 10.7412 0.501967 10.5459 0.697229L6.3033 4.93987C6.10804 5.13513 5.79146 5.13513 5.59619 4.93987L1.35355 0.697228C1.15829 0.501966 0.841709 0.501966 0.646447 0.697228C0.451185 0.89249 0.451184 1.20907 0.646446 1.40433L4.88909 5.64698C5.47487 6.23276 6.42462 6.23276 7.01041 5.64698L11.253 1.40434C11.4483 1.20907 11.4483 0.892492 11.253 0.69723Z" fill="white"/></svg>');
+				background-repeat: no-repeat;
+				background-position: calc(100% - 10px) center;
+				padding: 5px 30px 5px 10px;
+				background-size: 11px 6px;
 			}
 			.text-box:focus-visible {
 				outline: none;
@@ -194,7 +203,7 @@
 					border-left: 1px solid #528080;
 				}
 				.right-header {
-					padding: 20px 0 20px 0;
+					padding: 30px 0 0 0;
 				}
 				.result {
 					height: 100%;
@@ -205,10 +214,7 @@
 					padding: 0 30px 30px 30px;
 				}
 				.right-header-second-paragraph {
-					padding: 20px 30px 0 30px;
-				}
-				.right-header {
-					padding: 30px 0 20px 0;
+					padding: 15px 30px 15px 30px;
 				}
 				.text-box {
 					font-size: 1.5em;
@@ -230,13 +236,13 @@
 					padding: 0 15px 15px 15px;
 				}
 				.right-header {
-					padding: 15px 0 20px 0;
+					padding: 15px 0 0 0;
 				}
 				.right-header-paragraph {
 					padding: 0 30px 20px 30px;
 				}
 				.right-header-second-paragraph {
-					padding: 20px 20px 0 20px;
+					padding: 10px 20px 10px 20px;
 				}
 				.go-button { min-width: 1.5em; }
 			}
