@@ -172,6 +172,9 @@
 				float: right;
 				cursor: pointer;
 			}
+			.address-copy:hover {
+				transform: scale(0.9, 0.9);
+			}
 			.clipboard-logo {
 				height: 17px;
 			}
@@ -462,9 +465,9 @@
 					navigator.clipboard.writeText(text);
 					const copy_elem = document.getElementById("addr_copy_" + element_id);
 					copy_elem.innerHTML = CLIPBOARD_CHECK_SVG;
-					setInterval(function() {
+					setTimeout(function() {
 						copy_elem.innerHTML = CLIPBOARD_SVG;
-					}, 2000);
+					}, 1500);
 				}
 			});
 		</script>
