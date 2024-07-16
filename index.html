@@ -20,23 +20,25 @@
 				font-family: Manrope, sans-serif;
 			}
 			h1, h2 {
-				margin: 0 0 6px 0;
-				line-height: 1.2;
 				opacity: 1 !important;
+				color: inherit;
+				line-height: 1.2;
 			}
 			h1 {
+				margin: 0 0 6px 0;
 				font-size: 35px;
 			}
 			h2 {
+				margin: 0 0 6px 0;
 				font-size: 24px;
 			}
 			.tiny-print {
-				font-size: 13px;
+				font-size: 14px;
 				font-style: italic;
 				opacity: 0.6;
 			}
 			.small-print {
-				font-size: 15px;
+				font-size: 16px;
 				opacity: 0.9;
 			}
 			.address-type {
@@ -110,7 +112,7 @@
 				font-family: mono;
 				font-size-adjust: 0.5;
 			}
-			.small-print, .tiny-print {
+			.footer {
 				color: white;
 			}
 			.result {
@@ -118,6 +120,10 @@
 				color: white;
 				opacity: 0.9;
 				font-size: 17px;
+			}
+			.result > h2 {
+				margin: 0 0 6px 0;
+				line-height: 1.2;
 			}
 			.result-populated {
 				padding: 15px;
@@ -149,12 +155,10 @@
 			}
 			.address-type {
 				color: black;
-				margin-bottom: 4px;
 			}
 			.address-copy {
 				float: right;
 				cursor: pointer;
-				padding: 1px 0;
 			}
 			@media screen and (min-width: 768px) {
 				body {
@@ -162,6 +166,9 @@
 					flex-flow: column wrap;
 					height: 100vh;
 					box-sizing: border-box;
+				}
+				.footer > h2 {
+					margin: 10px 0 0 0;pick
 				}
 				.intro-text {
 					max-width: calc(50% - 15px);
@@ -188,7 +195,7 @@
 				}
 				.result {
 					height: 100%;
-					padding: 20px 30px 30px 30px !important;
+					padding: 23px 30px 30px 30px !important;
 					border-top: 1px solid #528080;
 				}
 				.right-header-paragraph {
@@ -210,6 +217,9 @@
 				}
 			}
 			@media screen and (max-width: 767px) {
+				.footer > h2 {
+					margin: 20px 0 0 0;
+				}
 				.intro-text {
 					padding: 15px 15px 0 15px;
 				}
@@ -262,6 +272,7 @@
 			<div class="result" id="result"></div>
 		</div>
 		<div class="footer">
+			<h2>How It Works</h2>
 			<p class="small-print">BIP 353 resolves DNS TXT records into bitcoin: URIs. Any standard (reusable) bitcoin: URI should work, for example a URI with a BOLT 12 offer (starting with lno), a Silent Payments Address (starting with sp), and an on-chain address may look like <span class="small-print mono">bitcoin:1OnChain?lno=lno1lightningoffer&amp;sp=sp1qsilentpayment</span></p>
 			<p class="small-print">Note that most BIP 353 names rely on <a href="https://bolt12.org">BOLT 12</a> or <a href="https://silentpayments.xyz">Silent Payments</a> and as both are relatively new, wallet support isn't yet universal.</p>
 			<p class="small-print">While you're absolutely trusting this site to not provide you with backdoored code, names are fully validated locally on your machine using DNSSEC. Thus, no matter what server you use to resolve the name, the worst they can do is log who you're paying or tell you they're not payable. They can never give you the wrong address!</p>
