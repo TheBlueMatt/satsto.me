@@ -351,6 +351,14 @@
 				document.getElementById("address").onkeypress = check_text;
 				document.getElementById("address").oninput = check_text;
 				check_text();
+				document.getElementById("address").onfocus = function() {
+					if (this.value === 'send.some@satsto.me')
+						document.getElementById("address").select();
+				};
+				document.getElementById("address").onkeydown = function(event) {
+					if(event.which == 13 || event.keyCode == 13)
+						lookup_domain();
+				};
 				window.lookup_domain = function() {
 					if (document.getElementById("paybutton").classList.contains("go-button-disabled")) {
 						return;
