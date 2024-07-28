@@ -117,7 +117,7 @@
 			.go-button {
 				cursor: pointer;
 			}
-			.mono {
+			code {
 				font-family: monospace;
 				font-size-adjust: 0.5;
 			}
@@ -288,7 +288,7 @@
 		</div>
 		<div class="footer">
 			<h2>How It Works</h2>
-			<p class="small-print">BIP 353 resolves DNS TXT records into <span class="mono">bitcoin:</span> URIs. Any standard (reusable) <span class="mono">bitcoin:</span> URI should work, for example a URI with a BOLT 12 offer (starting with lno), a Silent Payments Address (starting with sp), and an on-chain address may look like <code class="mono">bitcoin:1OnChain?lno=lno1lightningoffer&amp;sp=sp1qsilentpayment</code></p>
+			<p class="small-print">BIP 353 resolves DNS TXT records into <code>bitcoin:</code> URIs. Any standard (reusable) <code>bitcoin:</code> URI should work, for example a URI with a BOLT 12 offer (starting with lno), a Silent Payments Address (starting with sp), and an on-chain address may look like <code>bitcoin:1OnChain?lno=lno1lightningoffer&amp;sp=sp1qsilentpayment</code></p>
 			<p class="small-print">Note that most BIP 353 names rely on <a href="https://bolt12.org">BOLT 12</a> or <a href="https://silentpayments.xyz">Silent Payments</a> and as both are relatively new, wallet support isn't yet universal.</p>
 			<p class="small-print">While you're absolutely trusting this site to not provide you with backdoored code, names are fully validated locally on your machine using DNSSEC. Thus, no matter what server you use to resolve the name, the worst they can do is log who you're paying or tell you they're not payable. They can never give you the wrong address!</p>
 			<p class="small-print">Trust someone else to host a name for you? Check out <a href="https://twelve.cash">twelve.cash</a></p>
@@ -446,7 +446,7 @@
 					var res = "<h2>It works!</h2><p>" + name + " was successfully resolved to the following addresses.</p><p>Your wallet should have automatically opened to pay, but if not, <a href=\"" + bip353 + "\">click here to do so.</a></p>";
 					if (base_and_params[0].length != 0) {
 						if (base_and_params[0].startsWith("sp1q")) {
-							res += "<p>Note: the response included a Silent Payment address which was encoded in the \"body\" position in the URI (i.e. <span class='mono'>bitcoin:sp1q...</span>) rather than in the \"sp\" query parameter (i.e. <span class='mono'>bitcoin:?sp=sp1q...</span>). This is incorrect and may cause some wallets to fail to pay on-chain.</p>";
+							res += "<p>Note: the response included a Silent Payment address which was encoded in the \"body\" position in the URI (i.e. <code>bitcoin:sp1q...</code>) rather than in the \"sp\" query parameter (i.e. <code>bitcoin:?sp=sp1q...</code>). This is incorrect and may cause some wallets to fail to pay on-chain.</p>";
 							push_table_entry("On-Chain Silent Payment", "", base_and_params[0]);
 						} else {
 							push_table_entry("On-Chain Non-Private Address", "", base_and_params[0]);
