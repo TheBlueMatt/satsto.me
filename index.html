@@ -259,7 +259,7 @@
 		<div class="intro-text">
 			<h1>BIP 353 Resolver</h1>
 			<p>
-				<a href="https://github.com/bitcoin/bips/blob/master/bip-0353.mediawiki">BIP 353</a> defines the way to use simple human-readable names for Bitcoin payments.
+				<a rel="noreferrer" href="https://github.com/bitcoin/bips/blob/master/bip-0353.mediawiki">BIP 353</a> defines the way to use simple human-readable names for Bitcoin payments.
 			<p>
 				If your wallet doesn't yet resolve BIP 353 names natively, this site will resolve them for you.
 			</p>
@@ -289,11 +289,11 @@
 		<div class="footer">
 			<h2>How It Works</h2>
 			<p class="small-print">BIP 353 resolves DNS TXT records into <code>bitcoin:</code> URIs. Any standard (reusable) <code>bitcoin:</code> URI should work, for example a URI with a BOLT 12 offer (starting with lno), a Silent Payments Address (starting with sp), and an on-chain address may look like <code>bitcoin:1OnChain?lno=lno1lightningoffer&amp;sp=sp1qsilentpayment</code></p>
-			<p class="small-print">Note that most BIP 353 names rely on <a href="https://bolt12.org">BOLT 12</a> or <a href="https://silentpayments.xyz">Silent Payments</a> and as both are relatively new, wallet support isn't yet universal.</p>
+			<p class="small-print">Note that most BIP 353 names rely on <a rel="noreferrer" href="https://bolt12.org">BOLT 12</a> or <a rel="noreferrer" href="https://silentpayments.xyz">Silent Payments</a> and as both are relatively new, wallet support isn't yet universal.</p>
 			<p class="small-print">While you're absolutely trusting this site to not provide you with backdoored code, names are fully validated locally on your machine using DNSSEC. Thus, no matter what server you use to resolve the name, the worst they can do is log who you're paying or tell you they're not payable. They can never give you the wrong address!</p>
 			<p class="small-print">Trust someone else to host a name for you? Check out <a href="https://twelve.cash">twelve.cash</a></p>
-			<p class="tiny-print">Designed by volunteers in the <a href="https://bitcoin.design/">Bitcoin Design Community</a>.</p>
-			<p class="tiny-print">Find the full source <a href="https://github.com/TheBlueMatt/satsto.me">on Github</a>.</p>
+			<p class="tiny-print">Designed by volunteers in the <a rel="noreferrer" href="https://bitcoin.design/">Bitcoin Design Community</a>.</p>
+			<p class="tiny-print">Find the full source <a rel="noreferrer" href="https://github.com/TheBlueMatt/satsto.me">on Github</a>.</p>
 		</div>
 
 		<!-- dnssec_prover_wasm.js comes from running wasm-pack build --target web` in the `wasmpack` folder in dnssec-prover -->
@@ -339,7 +339,7 @@
 					if (!/^[\p{ASCII}]*$/u.test(addr_parts[1])) {
 						document.getElementById("paybutton").classList.add("go-button-disabled");
 						document.getElementById("errors").classList.add("errors-filled");
-						document.getElementById("errors").innerHTML = "To protect against <a href='https://en.wikipedia.org/wiki/IDN_homograph_attack'>Homograph Attacks</a>, the domain part of addres must be ASCII";
+						document.getElementById("errors").innerHTML = "To protect against <a rel='nofollow noreferrer' href='https://en.wikipedia.org/wiki/IDN_homograph_attack'>Homograph Attacks</a>, the domain part of addres must be ASCII";
 						return true;
 					}
 					document.getElementById("paybutton").classList.remove("go-button-disabled");
