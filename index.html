@@ -32,6 +32,19 @@
 				margin: 0 0 6px 0;
 				font-size: 24px;
 			}
+			button {
+				background: none;
+				color: inherit;
+				border: none;
+				padding: 0;
+				font: inherit;
+				cursor: pointer;
+				outline: inherit;
+			}
+			code {
+				font-family: monospace;
+				font-size-adjust: 0.5;
+			}
 			.tiny-print {
 				font-size: 14px;
 				font-style: italic;
@@ -55,7 +68,7 @@
 			}
 			a { color: inherit; }
 			.center-contents { display: flex; width: 100%; justify-content: center; }
-			.fill { display: flex; }
+			.fill { display: flex; gap: 3px; align-items: center; }
 			.fill-fixed { flex: 1 0; }
 			.fill-use-remaining {
 				flex: 0 1 100%;
@@ -116,10 +129,7 @@
 			}
 			.go-button {
 				cursor: pointer;
-			}
-			code {
-				font-family: monospace;
-				font-size-adjust: 0.5;
+				display: flex;
 			}
 			.footer {
 				color: white;
@@ -186,7 +196,7 @@
 					box-sizing: border-box;
 				}
 				.footer > h2 {
-					margin: 10px 0 0 0;pick
+					margin: 10px 0 0 0;
 				}
 				.intro-text {
 					max-width: calc(50% - 15px);
@@ -232,6 +242,9 @@
 				}
 			}
 			@media screen and (max-width: 767px) {
+				p, input, select {
+					font-size: 16px;
+				}
 				.footer > h2 {
 					margin: 20px 0 0 0;
 				}
@@ -271,9 +284,11 @@
 					<span class="bitcoin fill-fixed">₿</span>
 					<input class="fill-use-remaining text-box" type="text" id="address" value="send.some@satsto.me"/>
 					<!-- SVG from bootstrap icons, Copyright (c) 2019-2024 The Bootstrap Authors, MIT License -->
-					<svg onclick="lookup_domain()" id="paybutton" xmlns="http://www.w3.org/2000/svg" fill="white" class="go-button go-button-disabled fill-fixed" viewBox="0 0 16 16">
-						<path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
-					</svg>
+					<button title="Lookup Address" onclick="lookup_domain()" id="paybutton" class="go-button go-button-disabled">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 16 16" class="go-button-svg">
+								<path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
+						</svg>
+				</button>
 				</div>
 				<div class="errors" id="errors"></div>
 				<div class="right-header-second-paragraph center-contents">
@@ -289,11 +304,11 @@
 		<div class="footer">
 			<h2>How It Works</h2>
 			<p class="small-print">BIP 353 resolves DNS TXT records into <code>bitcoin:</code> URIs. Any standard (reusable) <code>bitcoin:</code> URI should work, for example a URI with a BOLT 12 offer (starting with lno), a Silent Payments Address (starting with sp), and an on-chain address may look like <code>bitcoin:1OnChain?lno=lno1lightningoffer&amp;sp=sp1qsilentpayment</code></p>
-			<p class="small-print">Note that most BIP 353 names rely on <a rel="noreferrer" href="https://bolt12.org">BOLT 12</a> or <a rel="noreferrer" href="https://silentpayments.xyz">Silent Payments</a> and as both are relatively new, wallet support isn't yet universal.</p>
+			<p class="small-print">Note that most BIP 353 names rely on <a target="_blank" rel="nofollow noopener noreferrer" href="https://bolt12.org">BOLT 12</a> or <a target="_blank" rel="nofollow noopener noreferrer" href="https://silentpayments.xyz">Silent Payments</a> and as both are relatively new, wallet support isn't yet universal.</p>
 			<p class="small-print">While you're absolutely trusting this site to not provide you with backdoored code, names are fully validated locally on your machine using DNSSEC. Thus, no matter what server you use to resolve the name, the worst they can do is log who you're paying or tell you they're not payable. They can never give you the wrong address!</p>
-			<p class="small-print">Trust someone else to host a name for you? Check out <a href="https://twelve.cash">twelve.cash</a></p>
-			<p class="tiny-print">Designed by volunteers in the <a rel="noreferrer" href="https://bitcoin.design/">Bitcoin Design Community</a>.</p>
-			<p class="tiny-print">Find the full source <a rel="noreferrer" href="https://github.com/TheBlueMatt/satsto.me">on Github</a>.</p>
+			<p class="small-print">Trust someone else to host a name for you? Check out <a target="_blank" rel="nofollow noopener noreferrer" href="https://twelve.cash">twelve.cash</a></p>
+			<p class="tiny-print">Designed by volunteers in the <a target="_blank" rel="nofollow noopener noreferrer" href="https://bitcoin.design/">Bitcoin Design Community</a>.</p>
+			<p class="tiny-print">Find the full source <a target="_blank" rel="nofollow noopener noreferrer" href="https://github.com/TheBlueMatt/satsto.me">on Github</a>.</p>
 		</div>
 
 		<!-- dnssec_prover_wasm.js comes from running wasm-pack build --target web` in the `wasmpack` folder in dnssec-prover -->
@@ -333,13 +348,13 @@
 					if (!/^[\p{ASCII}]*$/u.test(addr_parts[0])) {
 						document.getElementById("paybutton").classList.add("go-button-disabled");
 						document.getElementById("errors").classList.add("errors-filled");
-						document.getElementById("errors").innerHTML = "To protect against <a href='https://en.wikipedia.org/wiki/IDN_homograph_attack'>Homograph Attacks</a>, the user part of addres must be ASCII";
+						document.getElementById("errors").innerHTML = "To protect against <a target='_blank' rel='nofollow noopener noreferrer' href='https://en.wikipedia.org/wiki/IDN_homograph_attack'>Homograph Attacks</a>, the user part of addres must be ASCII";
 						return true;
 					}
 					if (!/^[\p{ASCII}]*$/u.test(addr_parts[1])) {
 						document.getElementById("paybutton").classList.add("go-button-disabled");
 						document.getElementById("errors").classList.add("errors-filled");
-						document.getElementById("errors").innerHTML = "To protect against <a rel='nofollow noreferrer' href='https://en.wikipedia.org/wiki/IDN_homograph_attack'>Homograph Attacks</a>, the domain part of addres must be ASCII";
+						document.getElementById("errors").innerHTML = "To protect against <a target='_blank' rel='nofollow noopener noreferrer' href='https://en.wikipedia.org/wiki/IDN_homograph_attack'>Homograph Attacks</a>, the domain part of address must be ASCII";
 						return true;
 					}
 					document.getElementById("paybutton").classList.remove("go-button-disabled");
@@ -434,16 +449,16 @@
 					var addr_idx = 0;
 					const base_and_params = bip353.substring(8).split("?");
 					const push_table_entry = function(ty, uri_pfx, contents) {
-						var value = "<h2 class='address-type'>" + ty + "<a class='address-copy' id='addr_copy_" + addr_idx + "' onclick=\"copy('" + contents + "', " + addr_idx + ")\">" + CLIPBOARD_SVG + "</a></h2>";
+						var value = "<h2 class='address-type'>" + ty + "<button title='Copy Address' class='address-copy' id='addr_copy_" + addr_idx + "' onclick=\"copy('" + contents + "', " + addr_idx + ")\">" + CLIPBOARD_SVG + "</button></h2>";
 						if (!/^[\p{ASCII}]*$/u.test(contents)) {
 							value = "Invalid";
 						} else {
-							value += "<a class='address-link' href='bitcoin:" + uri_pfx + contents + "'>" + contents + "</a>";
+							value += "<a target='_blank' rel='nofollow noopener noreferrer'  class='address-link' href='bitcoin:" + uri_pfx + contents + "'>" + contents + "</a>";
 						}
 						addr_idx += 1;
 						addr_ty_table += "<div class='address-card'>" + value + "</div>";
 					};
-					var res = "<h2>It works!</h2><p>" + name + " was successfully resolved to the following addresses.</p><p>Your wallet should have automatically opened to pay, but if not, <a href=\"" + bip353 + "\">click here to do so.</a></p>";
+					var res = "<h2>It works!</h2><p>" + name + " was successfully resolved to the following addresses.</p><p>Your wallet should have automatically opened to pay, but if not, <a target='_blank' rel='nofollow noopener noreferrer' href=\"" + bip353 + "\">click here to do so.</a></p>";
 					if (base_and_params[0].length != 0) {
 						if (base_and_params[0].startsWith("sp1q")) {
 							res += "<p>Note: the response included a Silent Payment address which was encoded in the \"body\" position in the URI (i.e. <code>bitcoin:sp1q...</code>) rather than in the \"sp\" query parameter (i.e. <code>bitcoin:?sp=sp1q...</code>). This is incorrect and may cause some wallets to fail to pay on-chain.</p>";
