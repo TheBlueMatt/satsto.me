@@ -315,16 +315,17 @@
 		<script type = "text/javascript">
 			// Do this before we load the modules to get the default value up quickly
 			window.default_hrn = 'send.some@satsto.me';
+			window.url_set_hrn = 'send.some@satsto.me';
 			if (document.getElementById("address").value === '') {
 				if (window.location.search.length > 1 && window.location.search[0] === "?") {
 					for (const pair of window.location.search.substring(1).split("&")) {
 						const key_value = pair.split("=");
 						if (key_value.length === 2 && key_value[0] === "name") {
-							window.default_hrn = key_value[1];
+							window.url_set_hrn = key_value[1];
 						}
 					}
 				}
-				document.getElementById("address").value = window.default_hrn;
+				document.getElementById("address").value = window.url_set_hrn;
 			}
 		</script>
 		<!-- dnssec_prover_wasm.js comes from running wasm-pack build --target web` in the `wasmpack` folder in dnssec-prover -->
@@ -338,44 +339,48 @@
 			import {CLIPBOARD_SVG, CLIPBOARD_CHECK_SVG} from './clipboard-svg.js';
 			init().then(() => {
 				const address_box = document.getElementById("address");
-				const check_text = function() {
-					if (address_box.value.startsWith("₿")) {
-						address_box.value = address_box.value.substring(1);
-					}
+				const text_valid = function() {
 					const addr_parts = address_box.value.split("@");
 					if (addr_parts.length != 2) {
 						document.getElementById("paybutton").classList.add("go-button-disabled");
 						document.getElementById("errors").classList.add("errors-filled");
 						document.getElementById("errors").innerHTML = "Address should have exactly one @";
-						return true;
+						return false;
 					}
 					if (addr_parts[0].length == 0) {
 						document.getElementById("paybutton").classList.add("go-button-disabled");
 						document.getElementById("errors").classList.add("errors-filled");
 						document.getElementById("errors").innerHTML = "Missing user part";
-						return true;
+						return false;
 					}
 					if (addr_parts[1].length == 0) {
 						document.getElementById("paybutton").classList.add("go-button-disabled");
 						document.getElementById("errors").classList.add("errors-filled");
 						document.getElementById("errors").innerHTML = "Missing domain";
-						return true;
+						return false;
 					}
 					if (!/^[\p{ASCII}]*$/u.test(addr_parts[0])) {
 						document.getElementById("paybutton").classList.add("go-button-disabled");
 						document.getElementById("errors").classList.add("errors-filled");
 						document.getElementById("errors").innerHTML = "To protect against <a rel='nofollow noopener noreferrer' href='https://en.wikipedia.org/wiki/IDN_homograph_attack'>Homograph Attacks</a>, the user part of addres must be ASCII";
-						return true;
+						return false;
 					}
 					if (!/^[\p{ASCII}]*$/u.test(addr_parts[1])) {
 						document.getElementById("paybutton").classList.add("go-button-disabled");
 						document.getElementById("errors").classList.add("errors-filled");
 						document.getElementById("errors").innerHTML = "To protect against <a rel='nofollow noopener noreferrer' href='https://en.wikipedia.org/wiki/IDN_homograph_attack'>Homograph Attacks</a>, the domain part of address must be ASCII";
-						return true;
+						return false;
 					}
 					document.getElementById("paybutton").classList.remove("go-button-disabled");
 					document.getElementById("errors").classList.remove("errors-filled");
 					document.getElementById("errors").innerHTML = "";
+					return true;
+				}
+				const check_text = function() {
+					if (address_box.value.startsWith("₿")) {
+						address_box.value = address_box.value.substring(1);
+					}
+					text_valid();
 					return true;
 				}
 				document.getElementById("address").onchange = check_text;
@@ -383,7 +388,7 @@
 				document.getElementById("address").oninput = check_text;
 				check_text();
 				document.getElementById("address").onfocus = function() {
-					if (this.value === window.default_hrn)
+					if (this.value === window.url_set_hrn)
 						document.getElementById("address").select();
 				};
 				document.getElementById("address").onkeydown = function(event) {
@@ -508,6 +513,9 @@
 					setTimeout(function() {
 						copy_elem.innerHTML = CLIPBOARD_SVG;
 					}, 1500);
+				}
+				if (text_valid() && window.default_hrn != window.url_set_hrn) {
+					lookup_domain();
 				}
 			});
 		</script>
