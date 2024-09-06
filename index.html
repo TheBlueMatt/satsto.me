@@ -283,7 +283,7 @@
 				<form onsubmit="return false;" method="post">
 				<div class="fill right-header-paragraph">
 					<span class="bitcoin fill-fixed">₿</span>
-					<input class="fill-use-remaining text-box" type="text" id="address" label="Human Readable Name to Resolve" value="send.some@satsto.me"/>
+					<input class="fill-use-remaining text-box" type="text" id="address" label="Human Readable Name to Resolve" value=""/>
 					<!-- SVG from bootstrap icons, Copyright (c) 2019-2024 The Bootstrap Authors, MIT License -->
 					<button title="Lookup Address" onclick="lookup_domain()" id="paybutton" class="go-button go-button-disabled">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 17 17" class="go-button-svg">
@@ -312,6 +312,21 @@
 			<p class="tiny-print">Find the full source <a rel="noopener noreferrer" href="https://github.com/TheBlueMatt/satsto.me">on Github</a>.</p>
 		</div>
 
+		<script type = "text/javascript">
+			// Do this before we load the modules to get the default value up quickly
+			window.default_hrn = 'send.some@satsto.me';
+			if (document.getElementById("address").value === '') {
+				if (window.location.search.length > 1 && window.location.search[0] === "?") {
+					for (const pair of window.location.search.substring(1).split("&")) {
+						const key_value = pair.split("=");
+						if (key_value.length === 2 && key_value[0] === "name") {
+							window.default_hrn = key_value[1];
+						}
+					}
+				}
+				document.getElementById("address").value = window.default_hrn;
+			}
+		</script>
 		<!-- dnssec_prover_wasm.js comes from running wasm-pack build --target web` in the `wasmpack` folder in dnssec-prover -->
 		<script type="module" src="dnssec_prover_wasm.js"></script>
 		<!-- doh_lookup.js comes from the `wasmpack` folder in the above git repo -->
@@ -368,7 +383,7 @@
 				document.getElementById("address").oninput = check_text;
 				check_text();
 				document.getElementById("address").onfocus = function() {
-					if (this.value === 'send.some@satsto.me')
+					if (this.value === window.default_hrn)
 						document.getElementById("address").select();
 				};
 				document.getElementById("address").onkeydown = function(event) {
