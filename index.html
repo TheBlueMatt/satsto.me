@@ -6,8 +6,8 @@
 		<style type="text/css">
 			@font-face {
 				font-family: "Manrope";
-				src: url('./fonts/Manrope-VariableFont_wght.ttf') format('woff2 supports variations'),
-				url('./fonts/Manrope-VariableFont_wght.ttf') format('woff2-variations');
+				src: url('./static/Manrope-VariableFont_wght.ttf') format('woff2 supports variations'),
+				url('./static/Manrope-VariableFont_wght.ttf') format('woff2-variations');
 				font-weight: 200 800;
 			}
 			body {
@@ -329,14 +329,14 @@
 			}
 		</script>
 		<!-- dnssec_prover_wasm.js comes from running wasm-pack build --target web` in the `wasmpack` folder in dnssec-prover -->
-		<script type="module" src="dnssec_prover_wasm.js"></script>
+		<script type="module" src="static/dnssec_prover_wasm.js"></script>
 		<!-- doh_lookup.js comes from the `wasmpack` folder in the above git repo -->
-		<script type="module" src="doh_lookup.js"></script>
-		<script type="module" src="clipboard-svg.js"></script>
+		<script type="module" src="static/doh_lookup.js"></script>
+		<script type="module" src="static/clipboard-svg.js"></script>
 		<script type="module">
-			import init, {verify_byte_stream} from './dnssec_prover_wasm.js';
-			import * as doh from './doh_lookup.js';
-			import {CLIPBOARD_SVG, CLIPBOARD_CHECK_SVG} from './clipboard-svg.js';
+			import init, {verify_byte_stream} from './static/dnssec_prover_wasm.js';
+			import * as doh from './static/doh_lookup.js';
+			import {CLIPBOARD_SVG, CLIPBOARD_CHECK_SVG} from './static/clipboard-svg.js';
 			init().then(() => {
 				const address_box = document.getElementById("address");
 				const text_valid = function() {
